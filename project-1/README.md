@@ -18,6 +18,4 @@
 
     sudo nano /etc/ansible/hosts
 
-![Alt text][def]
-
-[def]: ./images/inventory.png
+![Alt text](./images/inventory.png)
