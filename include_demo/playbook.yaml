@@ -1,0 +1,15 @@
+- name: 'Deploy a web application'
+  hosts: db_and_web_server1
+  tasks:
+    - name: Install all required dependencies
+      apt: name='{{ item }}' state=present
+      become: yes
+      loop:
+      - python
+      - python-setuptools 
+      - python-dev 
+      - build-essential 
+      - pip
+
+    - include: tasks/deploy_db.yaml
+    - include: tasks/deploy_webserver.yaml
