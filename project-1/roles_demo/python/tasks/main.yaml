@@ -1,0 +1,9 @@
+    - name: Install all required dependencies
+      apt: name='{{ item }}' state=present
+      become: yes
+      loop:
+      - python
+      - python-setuptools 
+      - python-dev 
+      - build-essential 
+      - pip
