@@ -11,6 +11,8 @@
     sudo apt update -y
     sudo apt install Ansible -y
 
+<hr>
+
 *3. Inventory file Setup*<br>
 
 *The inventory file contains information about the hosts you’ll manage with Ansible*
@@ -18,4 +20,12 @@
 
     sudo nano /etc/ansible/hosts
 
-![Alt text](./images/inventory.png)
+![Alt text](./images/inventory.png)<br>
+
+*4. Create user and add password to the created user using the below commands.*<br>
+
+    useradd <user-name>
+    passwd <user-name>
+
+![Alt text](./images/useradd.png)
+
