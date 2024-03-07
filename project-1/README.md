@@ -6,4 +6,8 @@
 
      sudo -E apt-add-repository ppa:ansible/ansible
 
-     
+*2. Insytall Ansible*<br>
+
+    sudo apt update -y
+    sudo apt install Ansible -y
+
