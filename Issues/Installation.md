@@ -6,7 +6,7 @@
 
 *solution: sudo -E apt-add-repository ppa:ansible/ansible   "use -E flag"*<br>
 
-![Alt text](./images/solution.png)<br>
+![Alt text](./images/ppa-solution.png)<br>
 
 <hr>
 
