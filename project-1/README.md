@@ -88,4 +88,7 @@
 
 ![Alt text](./images/copy-files.png)
 
+![Alt text](./images/filesinserver.png)
+
+<hr>
 
