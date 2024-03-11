@@ -1,0 +1,97 @@
+---
+- name: Deploy a web application
+  hosts: db_and_web_server*
+  tasks:
+    - name: Update package cache (for Debian/Ubuntu)
+      apt:
+        update_cache: yes
+      become: yes
+      when: ansible_pkg_mgr == 'apt'
+
+    - name: Install all required dependencies (for Debian/Ubuntu)
+      package:
+        name: '{{ item }}'
+        state: present
+      become: yes
+      loop:
+        - python
+        - python-setuptools 
+        - python-dev 
+        - build-essential 
+        - python-pip
+      when: ansible_pkg_mgr == 'apt'
+
+    - name: Install all required dependencies (for CentOS/RHEL)
+      package:
+        name: '{{ item }}'
+        state: present
+      become: yes
+      loop:
+        - python
+        - python-setuptools 
+        - python-devel 
+        - gcc 
+        - python-pip
+      when: ansible_pkg_mgr == 'yum' or ansible_pkg_mgr == 'dnf'
+
+    - name: Download MySQL Repository 
+      get_url:
+        url: https://dev.mysql.com/get/mysql-apt-config_0.8.22-1_all.deb
+        dest: /home/waheed
+      become: yes
+
+    - name: Add MySQL Repository
+      apt: 
+        deb: "/home/waheed/mysql-apt-config_0.8.22-1_all.deb"
+      become: yes 
+
+    - name: Install and Configure Database
+      package:
+        name: '{{ item }}'
+        state: present
+      become: yes
+      loop:
+        - python3-mysqldb
+        - mysql-server
+        - mysql-client
+
+    - name: Start Database Service
+      service: 
+        name: mysql 
+        state: started
+        enabled: yes
+
+    - name: Create Application Database
+      mysql_db:
+        login_unix_socket: /var/run/mysqld/mysqld.sock 
+        name: 'employee_db'
+        state: present
+      become: yes
+
+    - name: Create Database User with grant option
+      mysql_user:
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        name: db_user
+        password: 'Passw0rd'
+        priv: "*.*:ALL"
+        state: present
+      become: yes
+
+    - name: Install Python Flask dependencies
+      pip: 
+        name: '{{ item }}'
+        state: present
+      become: yes
+      loop:
+        - flask
+        - flask-mysql
+
+    - name: Copy source code to target servers
+      copy: 
+        src: app.py
+        dest: /opt/app.py
+      become: yes
+
+    - name: Start WebServer Service
+      shell: FLASK_APP=/opt/app.py  nohup flask run --host=0.0.0.0 &
+      become: yes
